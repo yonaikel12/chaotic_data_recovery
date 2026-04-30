@@ -1,0 +1,55 @@
+Metadata-Version: 2.4
+Name: chaotic-data-recovery
+Version: 0.1.0
+Summary: Industrial-grade fail-safe ingestion and recovery pipeline for chaotic business data files
+Author: GitHub Copilot
+Requires-Python: >=3.11
+Description-Content-Type: text/markdown
+Requires-Dist: pandas>=2.2.2
+Requires-Dist: numpy>=1.26.4
+Requires-Dist: openpyxl>=3.1.3
+Requires-Dist: clevercsv>=0.8.4
+Requires-Dist: ftfy>=6.3.1
+Requires-Dist: dateparser>=1.2.2
+Requires-Dist: Unidecode>=1.4.0
+Requires-Dist: charset-normalizer>=3.3.2
+Requires-Dist: python-dateutil>=2.9.0
+
+# Chaotic Data Recovery
+
+Proyecto aislado para ingesta robusta y limpieza fail-safe de archivos caoticos generados por usuarios no tecnicos.
+
+## Componentes
+- `src/chaotic_data_recovery/data_recovery_engine.py`: motor reusable con pipeline modular y reporte de calidad.
+- `notebooks/frankenstein_data_recovery_demo.ipynb`: notebook que fabrica un dataset apocaliptico y demuestra recuperacion configurable.
+- `docs/research_notes.md`: investigacion aplicada de problemas reales y tooling especializado.
+
+## Quick start
+```bash
+pip install -r requirements.txt
+pip install -e .
+```
+
+```python
+from pathlib import Path
+from chaotic_data_recovery import DataRecoveryEngine, RecoveryConfig
+
+config = RecoveryConfig(
+    header_row=3,
+    footers_to_skip=1,
+    decimal_separators=[",", "."],
+    thousands_separators=[".", ",", " "],
+    currency_symbols=["$", "EUR", "USD", "S/", "COP"],
+)
+
+engine = DataRecoveryEngine(config=config)
+result = engine.run(Path("data/raw/archivo_caotico.xlsx"))
+clean_df = result.dataframe
+quality_report = result.report
+```
+
+## Principios de diseno
+- Fail-safe por defecto.
+- Parametrizacion explicita.
+- Logging silencioso pero auditable.
+- Uso de librerias especializadas para cada tipo de caos.
